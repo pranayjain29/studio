@@ -1,29 +1,29 @@
 'use client';
 
 import { useState } from 'react';
-import { SearchForm, type SearchFormData } from '@/components/search-form';
-import { searchAmazonProduct } from './actions';
+import { FlipkartSearchForm, type FlipkartSearchFormData } from '@/components/flipkart-search-form';
+import { searchFlipkartProduct } from '../actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2, CheckCircle, AlertTriangle, ShoppingCart } from 'lucide-react';
+import { Loader2, CheckCircle, AlertTriangle, ShoppingBag } from 'lucide-react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
-export default function HomePage() {
+export default function FlipkartScrapperPage() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string>('');
-  const [searchedKeyword, setSearchedKeyword] = useState<string>('');
+  const [searchedFsns, setSearchedFsns] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
 
-  const handleSearch = async (data: SearchFormData) => {
+  const handleSearch = async (data: FlipkartSearchFormData) => {
     setStatus('loading');
-    setSearchedKeyword(data.keyword);
+    setSearchedFsns(data.fsns);
     setUserEmail(data.email);
-    setMessage(''); // Clear previous messages
+    setMessage(''); 
 
     try {
-      const result = await searchAmazonProduct(data.keyword, data.email);
-      setSearchedKeyword(result.searchedKeyword); // Update with keyword from result for consistency
+      const result = await searchFlipkartProduct(data.fsns, data.email);
+      setSearchedFsns(result.searchedFsns); 
       if (result.emailSentTo) {
         setUserEmail(result.emailSentTo);
       }
@@ -36,9 +36,8 @@ export default function HomePage() {
       }
     } catch (error) {
       setStatus('error');
-      // Use a generic message for unexpected client-side errors or if action throws without specific structure
       setMessage(error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.');
-      console.error("Search failed:", error);
+      console.error("Flipkart search failed:", error);
     }
   };
 
@@ -47,15 +46,15 @@ export default function HomePage() {
       <Card className="w-full max-w-lg shadow-xl rounded-xl">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <ShoppingCart size={32} strokeWidth={1.5} />
+            <ShoppingBag size={32} strokeWidth={1.5} />
           </div>
-          <CardTitle className="text-3xl font-bold">Amazon Keyword Research</CardTitle>
+          <CardTitle className="text-3xl font-bold">Flipkart FSN Scrapper</CardTitle>
           <CardDescription className="text-lg text-muted-foreground pt-1">
-            Enter a keyword and your email to generate an Amazon product report.
+            Enter FSNs (comma-separated) and your email to generate a Flipkart product report.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 p-6 sm:p-8">
-          <SearchForm onSearch={handleSearch} isLoading={status === 'loading'} />
+          <FlipkartSearchForm onSearch={handleSearch} isLoading={status === 'loading'} />
 
           {status === 'loading' && (
             <Alert className="flex items-center">
@@ -63,7 +62,7 @@ export default function HomePage() {
               <div>
                 <AlertTitle className="font-semibold">Generating Report...</AlertTitle>
                 <AlertDescription>
-                  Looking for products related to &quot;{searchedKeyword}&quot; and preparing your report. Please wait.
+                  Looking for products with FSNs &quot;{searchedFsns}&quot; and preparing your report. Please wait.
                 </AlertDescription>
               </div>
             </Alert>
@@ -90,7 +89,7 @@ export default function HomePage() {
           )}
         </CardContent>
       </Card>
-      <footer className="mt-8 text-center text-sm text-muted-foreground">
+       <footer className="mt-8 text-center text-sm text-muted-foreground">
         <p>&copy; {new Date().getFullYear()} Keyword Research Tools. All rights reserved.</p>
       </footer>
     </div>
