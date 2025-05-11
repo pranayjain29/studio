@@ -1,6 +1,6 @@
 'use server';
 
-const WEBHOOK_URL = 'https://scrappy.app.n8n.cloud/webhook-test/adde5ac8-17d4-4970-951c-ba16c1356529';
+const WEBHOOK_URL = 'https://scrappy.app.n8n.cloud/webhook-test/7b1cfaf5-0f01-4b7e-95dd-8c38fd4fac1c';
 
 interface ActionResult {
   success: boolean;
