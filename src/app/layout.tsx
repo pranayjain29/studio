@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Amazon Product Finder',
+  title: 'Amazon Keyword Research',
   description: 'Find Amazon products and get reports via email.',
 };
 

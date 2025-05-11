@@ -13,15 +13,20 @@ export default function HomePage() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string>('');
   const [searchedKeyword, setSearchedKeyword] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('');
 
   const handleSearch = async (data: SearchFormData) => {
     setStatus('loading');
     setSearchedKeyword(data.keyword);
+    setUserEmail(data.email);
     setMessage(''); // Clear previous messages
 
     try {
-      const result = await searchAmazonProduct(data.keyword);
+      const result = await searchAmazonProduct(data.keyword, data.email);
       setSearchedKeyword(result.searchedKeyword); // Update with keyword from result for consistency
+      if (result.emailSentTo) {
+        setUserEmail(result.emailSentTo);
+      }
       if (result.success) {
         setStatus('success');
         setMessage(result.message);
@@ -44,9 +49,9 @@ export default function HomePage() {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
             <ShoppingCart size={32} strokeWidth={1.5} />
           </div>
-          <CardTitle className="text-3xl font-bold">Amazon Product Finder</CardTitle>
+          <CardTitle className="text-3xl font-bold">Amazon Keyword Research</CardTitle>
           <CardDescription className="text-lg text-muted-foreground pt-1">
-            Enter a keyword to generate an Amazon product report.
+            Enter a keyword and your email to generate an Amazon product report.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 p-6 sm:p-8">
@@ -56,9 +61,9 @@ export default function HomePage() {
             <Alert className="flex items-center">
               <Loader2 className="h-5 w-5 animate-spin text-primary mr-3" />
               <div>
-                <AlertTitle className="font-semibold">Searching...</AlertTitle>
+                <AlertTitle className="font-semibold">Generating Report...</AlertTitle>
                 <AlertDescription>
-                  Looking for products related to &quot;{searchedKeyword}&quot;. Please wait.
+                  Looking for products related to &quot;{searchedKeyword}&quot; and preparing your report. Please wait.
                 </AlertDescription>
               </div>
             </Alert>
@@ -86,7 +91,7 @@ export default function HomePage() {
         </CardContent>
       </Card>
       <footer className="mt-8 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} Amazon Product Finder. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Amazon Keyword Research. All rights reserved.</p>
       </footer>
     </main>
   );
