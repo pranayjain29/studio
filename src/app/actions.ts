@@ -117,7 +117,7 @@ export async function searchFlipkartProduct(fsns: string, email: string): Promis
     if (response.ok) {
       return {
         success: true,
-        message: `We've started generating the report for FSNs '${fsns}'. It will be sent to ${email} shortly.`,
+        message: `We've started scraping Flipkart for the provided FSNs. The results will be sent to ${email} shortly.`,
         searchedFsns: fsns,
         emailSentTo: email,
       };
@@ -141,3 +141,4 @@ export async function searchFlipkartProduct(fsns: string, email: string): Promis
     };
   }
 }
+

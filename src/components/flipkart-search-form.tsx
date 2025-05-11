@@ -97,12 +97,12 @@ export function FlipkartSearchForm({ onSearch, isLoading }: FlipkartSearchFormPr
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Generating...
+              Scraping...
             </>
           ) : (
             <>
               <Search className="mr-2 h-5 w-5" />
-              Generate Product Report
+              Scrape Flipkart Prices
             </>
           )}
         </Button>
@@ -110,3 +110,4 @@ export function FlipkartSearchForm({ onSearch, isLoading }: FlipkartSearchFormPr
     </Form>
   );
 }
+

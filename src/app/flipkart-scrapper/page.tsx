@@ -12,24 +12,21 @@ type Status = 'idle' | 'loading' | 'success' | 'error';
 export default function FlipkartScrapperPage() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string>('');
-  const [searchedFsns, setSearchedFsns] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
 
   const handleSearch = async (data: FlipkartSearchFormData) => {
     setStatus('loading');
-    setSearchedFsns(data.fsns);
     setUserEmail(data.email);
     setMessage(''); 
 
     try {
       const result = await searchFlipkartProduct(data.fsns, data.email);
-      setSearchedFsns(result.searchedFsns); 
       if (result.emailSentTo) {
-        setUserEmail(result.emailSentTo);
+        setUserEmail(result.emailSentTo); 
       }
       if (result.success) {
         setStatus('success');
-        setMessage(result.message);
+        setMessage(`We have started scraping and we will notify you through email at ${result.emailSentTo || data.email}.`);
       } else {
         setStatus('error');
         setMessage(result.message);
@@ -50,7 +47,7 @@ export default function FlipkartScrapperPage() {
           </div>
           <CardTitle className="text-3xl font-bold">Flipkart FSN Scrapper</CardTitle>
           <CardDescription className="text-lg text-muted-foreground pt-1">
-            Enter FSNs (comma-separated) and your email to generate a Flipkart product report.
+            Enter FSNs (comma-separated) and your email to scrape Flipkart product prices.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 p-6 sm:p-8">
@@ -60,9 +57,9 @@ export default function FlipkartScrapperPage() {
             <Alert className="flex items-center">
               <Loader2 className="h-5 w-5 animate-spin text-primary mr-3" />
               <div>
-                <AlertTitle className="font-semibold">Generating Report...</AlertTitle>
+                <AlertTitle className="font-semibold">Scraping Prices...</AlertTitle>
                 <AlertDescription>
-                  Looking for products with FSNs &quot;{searchedFsns}&quot; and preparing your report. Please wait.
+                  Scraping Flipkart for the provided FSNs. We&apos;ll email the results to {userEmail}.
                 </AlertDescription>
               </div>
             </Alert>
@@ -95,3 +92,4 @@ export default function FlipkartScrapperPage() {
     </div>
   );
 }
+
